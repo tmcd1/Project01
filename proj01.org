@@ -1,0 +1,92 @@
+*Number Theory Project 01*
+
+* Common Core
+** Basic Definitions/Methods
+*** Confidentiality: 
+    -keeping information private from unauthorized parties
+*** Authentication: 
+    -checking to make sure a piece of data came from the stated sender
+*** Symmetric-key: 
+    -when the same key is used for both encryption and decryption
+*** Public-key: 
+    -when  a different key is used for encryption and decryption
+*** True Randomness: 
+    -when effects occur that could never be traced to any cause (when an outcome can’t be predicted
+*** Plaintext: 
+    -data before encryption and after decryption
+*** HSM: 
+    -hardware security module, manages digital keys and provides cryptoprocessing
+*** Integrity: 
+    -making sure information is not modified by unauthorized parties
+*** Steganography: 
+    -the art and practice of communicating using hidden messages
+*** Block Ciphers: 
+    -a fixed-length group of bits (“block”) is modified with an unvarying transformation specified 
+     by a symmetric key, used often with encryption of bulk data
+*** Private key: 
+    -keys only known to the owner
+*** Kerckhoffs’s Principle: 
+    -“A cryptosystem should be secure even if everything about the system, except the key, is public knowledge.”
+*** Digital signatures: 
+    -a mathematical technique used to validate the authenticity and integrity of a message, software or digital document
+*** SHA: 
+    -secure hash algorithms, a family of cryptographic hash functions published by the 
+     National Institute of Standards and Technology as a U.S. Federal Information Processing Standards
+*** Non-repudiation: 
+    -the assurance that someone cannot deny something, or the ability to ensure that a party 
+     to a contract or a communication cannot deny the authenticity of their signature on a document 
+     or the sending of a message that they originated
+*** Cryptography: 
+    -the art of writing or solving codes
+*** Stream Ciphers: 
+    -a symmetric key cipher where plaintext digits are combined with a pseudorandom cipher digit stream
+*** The Enigma Machine: 
+    -a series of electro-mechanical rotor cipher machines developed and used in the early- to mid-20th century to protect information
+*** Ciphertext: 
+    -information that has been encrypted
+*** GPG: 
+    -GNU Privacy Guard, free security software
+*** Key Exchange: 
+    -any method in cryptography by which keys are exchanged between two parties, allowing use of a cryptographic algorithm
+
+** The Enigma Machine
+   So, there were two groups that cracked the Enigma machine. The Poles were able to decode Enigma ciphertexts as early as 1932,
+   and the British, with Alan Turing, were able to crack the Enigma in 1939 with "the bombe". The Poles captured a codebook from 
+   the French and worked their way back. Alan Turing and his team made a computer to do their work for them.
+** Password Strength Security
+#+BEGIN_SRC elisp
+(load-file "/home/tj/school/spr18/237/dash.el/dash.el")
+#+END_SRC
+
+#+RESULTS:
+: t
+
+#+BEGIN_SRC elisp
+(defun password_checker()
+   "Check strength of password based on length, assuming upper/lower, numbers, and symbols"
+   (message "Check 1")
+   let* ((psswd_length length'(banana)))
+   (message "Length '%s" (psswd_length))
+   (if (< psswd_length 10)
+      (message "Weak")
+     message "Strong"))
+#+END_SRC
+
+#+RESULTS:
+: password_checker
+
+#+BEGIN_SRC elisp
+(setq l '(haha)
+ print l)
+#+END_SRC
+
+#+RESULTS:
+| haha |
+
+
+#+BEGIN_SRC elisp
+(-count '(haha))
+#+END_SRC
+
+#+RESULTS:
+: 104
