@@ -58,35 +58,96 @@
 (load-file "/home/tj/school/spr18/237/dash.el/dash.el")
 #+END_SRC
 
-#+RESULTS:
-: t
-
 #+BEGIN_SRC elisp
-(defun password_checker()
-   "Check strength of password based on length, assuming upper/lower, numbers, and symbols"
-   (message "Check 1")
-   let* ((psswd_length length'(banana)))
-   (message "Length '%s" (psswd_length))
-   (if (< psswd_length 10)
-      (message "Weak")
-     message "Strong"))
+(defun say_hello()
+    "Diga oi!"
+    (message "hello"))
+#+END_SRC
+#+BEGIN_SRC elisp
+(say_hello)
+#+END_SRC
+resultscode
+resultssilent
+resultsraw
+resultsoutput
+#+BEGIN_SRC elisp :results output
+(defun psswrd_chckr()
+   "Simple way to check the strength of a password
+
+   We are going to control how many possible combinations there are
+   with some state variables. Basically, if a character in the password
+   is contained in one of these sets, we flip a bit to tell us so. I would
+   do one for the symbols but that seems like too much work. Let's assume
+   that there are 32 on a standard keyboard (Don't worry, I counted on mine)."
+   
+   ; Password to check, at the top for your convenience
+   ; Keep it around 10 characters, please (it's not set up for long passwords)
+   (setq psswrd "")   
+
+   ; Sets to compare to
+   (setq lowercase '(97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122))
+   (setq uppercase '(65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90))
+   (setq numbers '(48 49 50 51 52 53 54 55 56 57))
+   (setq symbols '(32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 58 59 60 61 62 63 64 91 92 93 94 95 96 123 124 125 126))
+
+   ; Status container
+   (setq LOWERCASE 0)
+   (setq UPPERCASE 0)
+   (setq NUMBERS 0)
+   (setq SYMBOLS 0)
+   
+   ; Variables needed for the math operations
+   (setq attacks_per_second (* 1.7 0.000001))
+   (setq num_combinations 0)
+   
+   ; The value we are really concerned with!
+   (setq strength 0)
+   
+   ; Find the length of the password string
+   (setq psswrd_length (length (symbol-value 'psswrd)))
+   
+   ; Iterate through the string
+   (setq count 0)
+   (while (< count psswrd_length)
+      (if (member (elt psswrd count) lowercase) ; if the current element is lowercase, set this variable "High"
+         (setq LOWERCASE 1)
+      )
+      (if (member (elt psswrd count) uppercase)
+         (setq UPPERCASE 1)
+      )
+      (if (member (elt psswrd count) numbers) ; we can use the member operator because the symbols and numbers are
+         (setq NUMBERS 1)                     ;    represented by their ascii values
+      )
+      (if (member (elt psswrd count) symbols)
+         (setq SYMBOLS 1)
+      )
+      (setq count (1+ count)))
+
+   ; Set number of combinations
+   (if (equal LOWERCASE 1)
+      (setq num_combinations (+ num_combinations 26)))
+   (if (equal UPPERCASE 1)
+      (setq num_combinations (+ num_combinations 26)))
+   (if (equal NUMBERS 1)
+      (setq num_combinations (+ num_combinations 10)))
+   (if (equal SYMBOLS 1)
+      (setq num_combinations (+ num_combinations 33)))
+
+   ; Calculate the strength
+   (cond ((and (< 00 num_combinations) (< num_combinations 27)) (setq strength 1))
+         ((and (< 27 num_combinations) (< num_combinations 53)) (setq strength 2))
+         ((and (< 53 num_combinations) (< num_combinations 63)) (setq strength 3))
+         ((and (< 63 num_combinations) (< num_combinations 96)) (setq strength 4))
+   )
+   ; Output the strength
+   (print "On a scale of one to four, your password strength is:")
+   (print strength)
+)
+(psswrd_chckr)
 #+END_SRC
 
 #+RESULTS:
-: password_checker
-
-#+BEGIN_SRC elisp
-(setq l '(haha)
- print l)
-#+END_SRC
-
-#+RESULTS:
-| haha |
-
-
-#+BEGIN_SRC elisp
-(-count '(haha))
-#+END_SRC
-
-#+RESULTS:
-: 104
+: 
+: "On a scale of one to four, your password strength is:"
+: 
+: 0
