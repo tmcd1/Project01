@@ -54,22 +54,11 @@
    and the British, with Alan Turing, were able to crack the Enigma in 1939 with "the bombe". The Poles captured a codebook from 
    the French and worked their way back. Alan Turing and his team made a computer to do their work for them.
 ** Password Strength Security
-#+BEGIN_SRC elisp
-(load-file "/home/tj/school/spr18/237/dash.el/dash.el")
-#+END_SRC
-
-#+BEGIN_SRC elisp
-(defun say_hello()
-    "Diga oi!"
-    (message "hello"))
-#+END_SRC
-#+BEGIN_SRC elisp
-(say_hello)
-#+END_SRC
 resultscode
 resultssilent
 resultsraw
 resultsoutput
+
 #+BEGIN_SRC elisp :results output
 (defun psswrd_chckr()
    "Simple way to check the strength of a password
@@ -145,9 +134,74 @@ resultsoutput
 )
 (psswrd_chckr)
 #+END_SRC
+** Caesar Cipher
+
+#+BEGIN_SRC elisp :results output
+(defun caesar_cipher()
+   "An elisp implementation of a Caesar cipher"
+   
+   ; The plain text and key up front and personal
+   (setq plaintext "helloz")
+   (setq key ?b)
+
+   ; Find the length of the password
+   (setq msg_length (length (symbol-value 'plaintext)))
+
+   ; Make the password and key lowercase
+   (setq lower_letters (downcase plaintext))
+;   (setq lower_key (downcase key))
+
+   ; Find the actual amount to shift the plaintext from the key
+   (setq key_number (% key 96))
+
+   ; Encrypt!
+   ;    -Loop through the entire password
+   ;    -add the key to each letter in the password  
+   (setq count 0)
+   (setq ciphertext '())
+   (while (< count msg_length)
+      (setq ciphertext (cons (% (+ key_number (elt plaintext count)) 122) ciphertext))
+      (setq count (1+ count))
+   )
+
+
+   ; As the code stands now, if we get any wrap around, our values will be less than 97,
+   ;   so we'll be losing our ascii values. This loop is meant to fix that
+   (setq count2 0)
+   (setq cipher_with_loop '())
+   (while (< count2 (length (symbol-value 'ciphertext)))
+      (if (< (elt ciphertext count2) 97)
+         (setq cipher_with_loop (cons (+ 96 (elt ciphertext count2)) cipher_with_loop))
+       (setq cipher_with_loop (cons (elt ciphertext count2) cipher_with_loop))
+      )
+      (setq count2 (1+ count2))
+   )
+
+   ; Print out the encrypted ciphertext
+   (setq count3 0)
+   (setq encrpyted_text '())
+   (while (< count3 (length (symbol-value 'cipher_with_loop)))
+      (print (char-to-string (elt cipher_with_loop count3)))
+      (setq count3 (1+ count3))
+   )
+)
+
+(caesar_cipher)
+#+END_SRC
 
 #+RESULTS:
-: 
-: "On a scale of one to four, your password strength is:"
-: 
-: 0
+#+begin_example
+
+"j"
+
+"g"
+
+"n"
+
+"n"
+
+"q"
+
+"b"
+#+end_example
+
