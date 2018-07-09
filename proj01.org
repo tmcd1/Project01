@@ -148,8 +148,7 @@ resultsoutput
    (setq msg_length (length (symbol-value 'plaintext)))
 
    ; Make the password and key lowercase
-   (setq lower_letters (downcase plaintext))
-;   (setq lower_key (downcase key))
+   (setq plaintext (downcase plaintext))
 
    ; Find the actual amount to shift the plaintext from the key
    (setq key_number (% key 96))
@@ -204,4 +203,77 @@ resultsoutput
 
 "b"
 #+end_example
+** Vigenere Cipher
 
+#+BEGIN_SRC elisp :results output 
+(defun vigenere_cipher()
+   "An elisp implementation of the Vigenere cipher"
+   
+   ; Let's keep the key and the plaintext at the top again
+   (setq plaintext "hello")
+   (setq key "cat")
+
+   ; Make the plaintext and key lowercase
+   (setq plaintext (downcase plaintext))
+   (setq key (downcase key))
+
+   ; Find the lengths of the key and plaintext message
+   (setq msg_length (length (symbol-value 'plaintext)))
+   (setq key_length (length (symbol-value 'key)))
+
+   ; Make a list of the shift values we need
+   (setq count 0)
+   (setq key_nums '())
+   (while (< count key_length)
+      (setq key_nums (cons (% (elt key count) 96) key_nums))
+      (setq count (1+ count))
+   )
+   (setq key_nums (reverse key_nums))
+
+   ; Encrypt using the Vigenere algorithm
+   ;    It's pretty straightforward, we just need some clever math
+   (setq count1 0)
+   (setq ciphertext '())
+   (while (< count1 msg_length)
+      (setq ciphertext (cons (% (+ (elt key_nums (% count1 key_length)) (elt plaintext count1)) 122) ciphertext))
+      (setq count1 (1+ count1))
+   )
+   (setq ciphertext (reverse ciphertext)) ; To reverse the reversing caused by the cons function
+
+   ; Let's take care of the wrap-around values that might be less than 97 (aka 'a' in ascii)
+   (setq count2 0)
+   (setq cipher_with_wrap '())
+   (while (< count2 (length (symbol-value 'ciphertext)))
+      (if (< (elt ciphertext count2) 97)
+         (setq cipher_with_wrap (cons (+ 96 (elt ciphertext count2)) cipher_with_wrap))
+       (setq cipher_with_wrap (cons (elt ciphertext count2) cipher_with_wrap))
+      )
+      (setq count2 (1+ count2))
+   )
+   (setq cipher_with_wrap (reverse cipher_with_wrap))
+
+
+   ; All that's left is to print out the cipher values!
+   (setq count3 0)
+   (while (< count3 (length (symbol-value 'cipher_with_wrap)))
+      (print (char-to-string (elt cipher_with_wrap count3)))
+      (setq count3 (1+ count3))
+   )
+)
+
+(vigenere_cipher)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+"k"
+
+"f"
+
+"f"
+
+"o"
+
+"p"
+#+end_example
